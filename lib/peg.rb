@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Peg
   attr_reader :color
 
