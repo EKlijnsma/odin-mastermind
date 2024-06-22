@@ -14,7 +14,7 @@ class Player
   end
 
   private
-  
+
   def get_input(colors)
     while (guess = gets.chomp.to_i)
       return Peg.new(colors[guess]) if guess >= 0 && guess <= colors.length
