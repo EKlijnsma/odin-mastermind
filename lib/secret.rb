@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'clue'
 require_relative 'peg_sequence'
 require_relative 'peg'
@@ -28,11 +30,11 @@ class Secret < PegSequence
     # Unhide the secret if all 4 pegs are guessed
     @hidden = false if first_results[:feedback].length == 4
     second_results = check_color(first_results[:guess], first_results[:secret])
-    
+
     # Combine black and white pins for feedback and add question marks if required for a total of 4 items.
     feedback = first_results[:feedback].concat(second_results)
     (4 - feedback.length).times { feedback.push '❔' }
-    
+
     # Shuffle the order and return a clue instance
     Clue.new(feedback.shuffle)
   end
