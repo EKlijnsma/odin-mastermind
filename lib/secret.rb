@@ -1,5 +1,7 @@
+require_relative 'clue'
 require_relative 'peg_sequence'
 require_relative 'peg'
+require_relative 'pin'
 
 class Secret < PegSequence
   def initialize(colors)
@@ -17,10 +19,19 @@ class Secret < PegSequence
   end
 
   def evaluate_guess(guess)
-    secret_copy = sequence.map(&:dup) # Deep copy of the secret sequence
+    # Deep copy of the secret sequence
+    secret_copy = sequence.map(&:dup)
     first_results = check_color_and_positions(guess.sequence, secret_copy)
+    # Unhide the secret if all 4 pegs are guessed
+    @hidden = false if first_results[:feedback].length == 4
     second_results = check_color(first_results[:guess], first_results[:secret])
-    first_results[:feedback].concat(second_results).sort
+    
+    # Combine black and white pins for feedback and add question marks if required for a total of 4 items.
+    feedback = first_results[:feedback].concat(second_results)
+    (4 - feedback.length).times { feedback.push '❔' }
+    
+    # Shuffle the order and return a clue instance
+    Clue.new(feedback.shuffle)
   end
 
   private
@@ -31,7 +42,7 @@ class Secret < PegSequence
       secret_peg = sequence2[index]
       next unless guess_peg.color == secret_peg.color
 
-      feedback.push 'black'
+      feedback.push Pin.new(:black)
       sequence1[index] = nil
       sequence2[index] = nil
     end
@@ -42,7 +53,7 @@ class Secret < PegSequence
   def check_color(guess_sequence, secret_sequence)
     feedback = []
     secret_sequence.each do |secret_peg|
-      feedback.push 'white' if guess_sequence.any? { |guess_peg| guess_peg.color == secret_peg.color }
+      feedback.push Pin.new(:white) if guess_sequence.any? { |guess_peg| guess_peg.color == secret_peg.color }
     end
     feedback
   end
