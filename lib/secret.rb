@@ -21,7 +21,10 @@ class Secret < PegSequence
   def evaluate_guess(guess)
     # Deep copy of the secret sequence
     secret_copy = sequence.map(&:dup)
-    first_results = check_color_and_positions(guess.sequence, secret_copy)
+    # Deep copy of the guess sequence
+    guess_sequence_copy = guess.sequence.map(&:dup)
+
+    first_results = check_color_and_positions(guess_sequence_copy, secret_copy)
     # Unhide the secret if all 4 pegs are guessed
     @hidden = false if first_results[:feedback].length == 4
     second_results = check_color(first_results[:guess], first_results[:secret])

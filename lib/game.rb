@@ -28,13 +28,12 @@ class Game
     @@MAX_ROUNDS.times do |i|
       puts "---ROUND #{i}---".colorize(:red)
       guess = player.make_guess(@@COLORS)
-      puts "Your guess: #{guess}"
       clue = secret.evaluate_guess(guess)
       if (secret.hidden? == false)
         self.win = true
         break
       end
-      puts "Computer responds: #{clue}"
+      puts "Your guess: #{guess} - Computer responds: #{clue}"
     end
 
     self.announce_end
