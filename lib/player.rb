@@ -3,9 +3,6 @@ require_relative 'peg'
 
 class Player
   def make_guess(colors)
-    # List colors with numbers
-    colors.each_with_index { |color, i| puts "#{i} is for #{color}" }
-  
     # Prompt user to enter a 4-digit number once
     puts "Enter a 4-digit number that represents your guess (e.g., 0123):"
     input = gets.chomp

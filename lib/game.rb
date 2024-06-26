@@ -21,6 +21,9 @@ class Game
     # Generate player
     player = Player.new
     
+    # List colors with numbers
+    @@COLORS.each_with_index { |color, i| puts "#{i} is for #{color}" }
+  
     # Game loop
     @@MAX_ROUNDS.times do |i|
       puts "---ROUND #{i}---".colorize(:red)
