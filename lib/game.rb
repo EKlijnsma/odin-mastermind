@@ -23,7 +23,7 @@ class Game
     
     # Game loop
     @@MAX_ROUNDS.times do |i|
-      puts "---ROUND #{i}---"
+      puts "---ROUND #{i}---".colorize(:red)
       guess = player.make_guess(@@COLORS)
       puts "Your guess: #{guess}"
       clue = secret.evaluate_guess(guess)
