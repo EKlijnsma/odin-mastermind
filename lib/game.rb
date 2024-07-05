@@ -82,10 +82,5 @@ class Game
     puts announce_end(secret)
   end
 
-  def announce_end(secret)
-    secret.reveal
-    win ? "You won, the secret code was #{secret}" : "You lost, the secret code was #{secret}"
-  end
-
   attr_accessor :win, :max_rounds, :colors
 end
