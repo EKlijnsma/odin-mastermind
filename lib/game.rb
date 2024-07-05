@@ -9,11 +9,9 @@ require_relative 'player'
 require_relative 'secret'
 
 class Game
-  @max_rounds = 12
-  @colors = %i[red light_green light_yellow blue grey light_magenta light_red white]
-  
-
   def initialize
+    self.max_rounds = 12
+    self.colors = %i[red light_green light_yellow blue grey light_magenta light_red white]
     self.win = false
   end
 
