@@ -17,12 +17,12 @@ class Game
   end
 
   def break?
-    print 'You can choose to MAKE or BREAK the secret code. Do you want to BREAK? (y/n)'
+    print 'You can choose to MAKE or BREAK the secret code. Do you want to BREAK the computers code? (y/n)'
     input = gets.chomp
 
     # Validate the input to ensure it is exactly 4 digits
     until input.downcase == 'y' || input.downcase == 'n'
-      puts "Invalid input. Please enter 'y' or 'n'.\nDo you want to BREAK? (y/n)"
+      puts "Invalid input. Please enter 'y' or 'n'.\nDo you want to BREAK the computers code? (y/n)"
       input = gets.chomp
     end
 
@@ -50,7 +50,7 @@ class Game
         self.win = true
         break
       end
-      print "Guess: #{guess} | Clue: #{clue}"
+      print "Your guess: #{guess} | Clue: #{clue}"
     end
     puts
     puts announce_end(secret)
@@ -58,7 +58,7 @@ class Game
 
   def announce_end(secret)
     secret.reveal
-    win ? "You won, the secret code was #{secret}" : "You lost, the secret code was #{secret}"
+    win ? "Broke the secret code: #{secret}" : "The secret code was not broken in time! It was: #{secret}"
   end
 
   def play_make
@@ -70,6 +70,7 @@ class Game
     player = CpuPlayer.new
 
     # Game loop
+    clue = []
     @max_rounds.times do |_i|
       guess = player.make_guess(@colors)
       clue = secret.evaluate_guess(guess)
@@ -77,7 +78,7 @@ class Game
         self.win = true
         break
       end
-      puts "Guess: #{guess} | Clue: #{clue}"
+      puts "CPU guess: #{guess} | Clue: #{clue}"
     end
     puts announce_end(secret)
   end
