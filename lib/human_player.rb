@@ -3,10 +3,10 @@
 require_relative 'guess'
 require_relative 'peg'
 
-class Player
+class HumanPlayer
   def make_guess(colors)
     # Prompt user to enter a 4-digit number once
-    puts 'Enter a 4-digit number that represents your guess (e.g., 0123):'
+    print '| Enter new guess: '
     input = gets.chomp
 
     # Validate the input to ensure it is exactly 4 digits

@@ -1,15 +1,41 @@
 # frozen_string_literal: true
 
 require_relative 'clue'
+require_relative 'game'
 require_relative 'peg_sequence'
 require_relative 'peg'
 require_relative 'pin'
 
 class Secret < PegSequence
-  def initialize(colors)
+  def initialize(_colors)
+    # Initialize @sequence properly using super
     super([])
-    4.times { sequence.push(Peg.new(colors.sample)) }
     @hidden = true
+  end
+
+  def random(colors)
+    4.times { @sequence.push(Peg.new(colors.sample)) }
+  end
+
+  def input(colors)
+    # Prompt user to enter a 4-digit number once
+    puts 'Use the following digits for inputting their corresponding colors:'
+    colors.each_with_index { |color, i| print "- #{i.to_s.colorize(color)} -" }
+    puts
+    print 'Enter secret code: '
+    input = gets.chomp
+
+    # Validate the input to ensure it is exactly 4 digits
+    until input.match?(/^\d{4}$/)
+      puts 'Invalid input. Please enter exactly 4 digits:'
+      input = gets.chomp
+    end
+
+    # Convert the input into an array of digits and map them to the corresponding colors
+    new_guess = input.chars.map { |digit| Peg.new(colors[digit.to_i]) }
+    new_guess.each do |peg|
+      @sequence.push(peg)
+    end
   end
 
   def hidden?
@@ -27,8 +53,7 @@ class Secret < PegSequence
     guess_sequence_copy = guess.sequence.map(&:dup)
 
     first_results = check_color_and_positions(guess_sequence_copy, secret_copy)
-    # Unhide the secret if all 4 pegs are guessed
-    @hidden = false if first_results[:feedback].length == 4
+    reveal if first_results[:feedback].length == 4
     second_results = check_color(first_results[:guess], first_results[:secret])
 
     # Combine black and white pins for feedback and add question marks if required for a total of 4 items.
@@ -37,6 +62,10 @@ class Secret < PegSequence
 
     # Shuffle the order and return a clue instance
     Clue.new(feedback.shuffle)
+  end
+
+  def reveal
+    self.hidden = false
   end
 
   private
